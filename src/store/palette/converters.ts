@@ -134,6 +134,23 @@ export function exportToCSS(palette: Palette): string {
   return strings.join('\n')
 }
 
+/** Convert local palette to SCSS variables
+ * @param palette
+ */
+export function exportToSCSS(palette: Palette): string {
+  let { tones, hues, colors, name } = palette
+  let strings: string[] = [`/* ${name} color palette */`]
+  hues.forEach((hue, hueIdx) => {
+    strings.push('')
+    strings.push('/* ' + hue + ' */')
+    tones.forEach((tone, toneIdx) => {
+      const color = colors[hueIdx][toneIdx]
+      strings.push(`$${hue.toLowerCase()}-${tone}: ${color.hex};`)
+    })
+  })
+  return strings.join('\n')
+}
+
 /** Get palette permalink
  *  @param palette
  */

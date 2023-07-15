@@ -5,6 +5,7 @@ import { paletteStore, paletteIdStore, paletteListStore } from './stores'
 import {
   clampColorsToRgb,
   setHueHue,
+  setChromaChroma,
   setToneLuminance,
 } from './paletteReducers'
 import { parseHexPalette } from './converters'
@@ -136,6 +137,15 @@ export const currentHueToRow = action(
   store => {
     const selected = selectedStore.get()
     setPalette(setHueHue(store.get(), selected.color.h, selected.hueId))
+  }
+)
+
+export const currentChromaToRow = action(
+  paletteStore,
+  'currentChromaToRow',
+  store => {
+    const selected = selectedStore.get()
+    setPalette(setChromaChroma(store.get(), selected.color.c, selected.hueId))
   }
 )
 

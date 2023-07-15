@@ -174,6 +174,22 @@ export function setHueHue(
   }
 }
 
+export function setChromaChroma(
+  palette: Palette,
+  chromaValue: number,
+  chromaId: number
+): Palette {
+  const { lch2color } = colorSpaces[palette.mode]
+  return {
+    ...palette,
+    colors: palette.colors.map(colors =>
+      colors.map((color, id) =>
+        id === chromaId ? lch2color([color.l, chromaValue, color.h]) : color
+      )
+    ),
+  }
+}
+
 export function clampColorsToRgb(palette: Palette): Palette {
   const { hex2color } = colorSpaces[palette.mode]
   return {

@@ -6,7 +6,7 @@ import {
   exportToTokens,
   parseHexPalette,
 } from 'store/palette'
-import { exportToCSS } from 'store/palette/converters'
+import { exportToCSS, exportToSCSS } from 'store/palette/converters'
 import { paletteStore, setPalette } from 'store/palette'
 import { TextArea } from './inputs'
 import { CopyButton } from './CopyButton'
@@ -34,6 +34,15 @@ export const CSSExportButton: FC = () => {
   )
 }
 
+export const SCSSExportButton: FC = () => {
+  const palette = useStore(paletteStore)
+  return (
+    <CopyButton getContent={() => exportToSCSS(palette)}>
+      Copy SCSS variables
+    </CopyButton>
+  )
+}
+
 export const ExportField: FC = () => {
   const palette = useStore(paletteStore)
   const ref = useRef<any>()
@@ -52,8 +61,8 @@ export const ExportField: FC = () => {
       ref={ref}
       onBlur={() => setAreaValue(currentJSON)}
       value={areaValue}
-      onFocus={e => e.target.select()}
-      onChange={e => {
+      onFocus={onFocus}
+      onChange={(e: { target: { value: any } }) => {
         const value = e.target.value
         setAreaValue(value)
         if (value) {
@@ -75,3 +84,4 @@ const JSONArea = styled(TextArea)`
   min-height: 120px;
   resize: none;
 `
+const onFocus = (e: { target: { select: () => any } }) => e.target.select()

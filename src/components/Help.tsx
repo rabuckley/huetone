@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import styled from 'styled-components'
-import { CSSExportButton, TokenExportButton } from './Export'
+import { CSSExportButton, SCSSExportButton, TokenExportButton } from './Export'
 
 export const Help: FC = () => (
   <Wrapper>
@@ -26,6 +26,9 @@ const Export: FC = () => (
     </p>
     <p>
       <CSSExportButton />
+    </p>
+    <p>
+      <SCSSExportButton />
     </p>
   </Section>
 )

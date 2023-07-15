@@ -52,13 +52,11 @@ export function drawImageOnCanvasSafe(
     // Worker was able to prepare a bitmap
     ctx.drawImage(image, from, 0, redrawWidth, height)
   } else if (image.height === height) {
-
-  /** An assumption on whether scaling of rendered image to intrinsic canvas size is required */
+    /** An assumption on whether scaling of rendered image to intrinsic canvas size is required */
     // putImageData if fastest for non-scale ImageData render
     ctx.putImageData(image, from, 0)
   } else if ('createImageBitmap' in window && !isSafari) {
-
-  /** Fallback area for scaling and obsolete user-agents */
+    /** Fallback area for scaling and obsolete user-agents */
     // Safari lacks proper Canvas and ImageBitmap implementation
     // https://bugs.webkit.org/show_bug.cgi?id=182424
     void createImageBitmap(image)
