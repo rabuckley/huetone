@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef } from 'react'
-import styled from 'styled-components'
 import debounce from 'lodash/debounce'
 import { useStore } from '@nanostores/react'
 import { Channel, spaceName, TColor } from 'shared/types'
@@ -92,7 +91,7 @@ export function Canvas(props: {
     }
   }, [colors, debouncedRepaint, mode])
   return (
-    <div className="overflow-hidden rounded-lg bg-white bg-striped">
+    <div className="overflow-hidden rounded-lg bg-white bg-striped border-2 border-t-0 border-zinc-300 dark:border-zinc-700 rounded-t-none">
       <canvas
         ref={canvasRef}
         width={width}

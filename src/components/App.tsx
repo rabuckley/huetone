@@ -13,6 +13,7 @@ import { selectedStore, setSelected } from 'store/currentPosition'
 import { Header } from './Header'
 import ColourBar from './ColourBar'
 import ToneBar from './ToneBar'
+import ColourComparsion from './ColourComparision'
 
 const chartWidth = 500
 
@@ -39,6 +40,10 @@ export default function App() {
         </PaletteSection>
 
         <div className="d-flex gap-4 p-8">
+          <ColourComparsion
+            colour={palette.colors[selected.hueId][selected.toneId]}
+          />
+
           <div className="grid grid-cols-2 gap-12">
             <ColourBar />
             <ToneBar />

@@ -38,19 +38,10 @@ export function Scale({
   return (
     <div>
       <h2 className="font-semibold text-lg mt-8 mb-4">{Names[channel]}</h2>
-      <div
-        style={{
-          width: width,
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
+      <div className="flex flex-col" style={{ width: width }}>
         <div
-          style={{
-            display: 'flex',
-            borderRadius: '8px 8px 0 0',
-            overflow: 'hidden',
-          }}
+          className="flex overflow-hidden"
+          style={{ borderRadius: '8px 8px 0 0' }}
         >
           {colors.map((color, i) => (
             <Value key={i} color={color.hex} onClick={() => onSelect(i)}>
@@ -58,15 +49,7 @@ export function Scale({
             </Value>
           ))}
         </div>
-        <div
-          style={{
-            display: 'flex',
-            position: 'relative',
-            padding: 0,
-            margin: 0,
-            lineHeight: 0,
-          }}
-        >
+        <div className="flex relative p-0 m-0" style={{ lineHeight: 0 }}>
           <Canvas
             width={width}
             height={height}

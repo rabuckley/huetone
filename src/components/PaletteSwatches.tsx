@@ -113,6 +113,24 @@ export const PaletteSwatches: FC = () => {
   )
 }
 
+interface SmallButtonProps {
+  children: React.ReactNode
+  title: string
+  onClick: () => void
+}
+
+const SmallButton = ({ children, title, onClick }: SmallButtonProps) => {
+  return (
+    <button
+      className="hover:text-black dark:hover:text-white"
+      onClick={onClick}
+      title={title}
+    >
+      {children}
+    </button>
+  )
+}
+
 const Wrapper = styled.div<{ columns: number; rows: number }>`
   display: grid;
   grid-template-columns: 64px repeat(${p => p.columns}, 48px) 24px;
@@ -121,14 +139,4 @@ const Wrapper = styled.div<{ columns: number; rows: number }>`
 
 const ToneInput = styled(InvisibleInput)`
   text-align: center;
-`
-
-const SmallButton = styled(Button)`
-  background: transparent;
-  padding: 0;
-  opacity: 0;
-
-  ${Wrapper}:hover & {
-    opacity: 1;
-  }
 `

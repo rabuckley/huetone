@@ -17,9 +17,9 @@ export type DrawChartProps = {
 }
 
 const edge = {
-  r: 10,
-  g: 10,
-  b: 10,
+  r: 100,
+  g: 100,
+  b: 100,
   a: 255,
 }
 
