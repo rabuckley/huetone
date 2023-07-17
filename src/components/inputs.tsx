@@ -1,46 +1,23 @@
+import { MouseEventHandler, ReactNode } from 'react'
 import styled from 'styled-components'
 
-export const Button = styled.button`
-  cursor: pointer;
-  border: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  color: var(--c-text-secondary);
-  border-radius: var(--radius-m);
-  background-color: var(--c-btn-bg);
-  font-size: 14px;
-  line-height: 20px;
-  padding: 6px 8px;
-  transition: 100ms ease-out;
+interface ButtonProps {
+  children: ReactNode
+  onClick?: MouseEventHandler<HTMLButtonElement>
+  title?: string
+}
 
-  :hover {
-    color: var(--c-text-primary);
-    background-color: var(--c-btn-bg-hover);
-  }
-
-  :active {
-    background-color: var(--c-btn-bg-active);
-    transform: translateY(1px);
-    transition: 100ms ease-out;
-  }
-
-  :focus {
-    outline: 1px solid var(--c-text-primary);
-    outline-offset: 3px;
-  }
-  :focus:not(:focus-visible) {
-    outline: none;
-  }
-`
-
-export const Select = styled(Button.withComponent('select'))`
-  :active {
-    /* Transform closes select on Firefox (or not) */
-    transform: none;
-  }
-`
+export const Button = ({ children, onClick, title }: ButtonProps) => {
+  return (
+    <button
+      className="flex px-4 py-2 text-red bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded"
+      onClick={onClick}
+      title={title}
+    >
+      {children}
+    </button>
+  )
+}
 
 export const InvisibleInput = styled.input`
   border: none;

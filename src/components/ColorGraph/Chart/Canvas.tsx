@@ -56,7 +56,7 @@ export function Canvas(props: {
     return debounce((colors: TColor[], mode: spaceName) => {
       console.log('🖼 Repaint canvas')
       const canvas = canvasRef.current
-      const ctx = canvas?.getContext('2d')
+      const ctx = canvas?.getContext('2d', { colorSpace: 'display-p3' })
       if (!ctx) return
 
       const drawPartialImage: DrawPartialFn = (image, from, to) => {
@@ -92,31 +92,13 @@ export function Canvas(props: {
     }
   }, [colors, debouncedRepaint, mode])
   return (
-    <Wrapper>
-      <StyledCanvas
+    <div className="overflow-hidden rounded-lg bg-white bg-striped">
+      <canvas
         ref={canvasRef}
         width={width}
         height={height}
         style={{ filter: settings.showColors ? '' : 'var(--canvas-filter)' }}
       />
-    </Wrapper>
+    </div>
   )
 }
-
-const Wrapper = styled.div`
-  --c-1: hsl(0, 0%, 85%);
-  --c-2: hsl(0, 0%, 94%);
-  overflow: hidden;
-  border-radius: 0 0 8px 8px;
-  background-color: var(--c-2);
-  background-image: linear-gradient(45deg, var(--c-1) 25%, transparent 25%),
-    linear-gradient(-45deg, var(--c-1) 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, var(--c-1) 75%),
-    linear-gradient(-45deg, transparent 75%, var(--c-1) 75%);
-  background-size: 6px 6px;
-  background-position: 0 0, 0 3px, 3px -3px, -3px 0px;
-`
-
-const StyledCanvas = styled.canvas`
-  filter: drop-shadow(0px 0px 1px var(--c-1));
-`

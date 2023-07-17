@@ -1,4 +1,5 @@
 import { HexPalette } from '../types'
+import dse from './dse.json'
 import antDesign from './ant_design.json'
 import evergreen from './evergreen.json'
 import example from './example.json'
@@ -15,6 +16,7 @@ import radix_ui_light from './radix_ui_light.json'
 import tailwind from './tailwind.json'
 
 export const PRESETS: HexPalette[] = [
+  dse,
   example,
   semrush,
   stripe,

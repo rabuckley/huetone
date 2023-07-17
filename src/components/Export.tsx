@@ -6,7 +6,11 @@ import {
   exportToTokens,
   parseHexPalette,
 } from 'store/palette'
-import { exportToCSS, exportToSCSS } from 'store/palette/converters'
+import {
+  exportToCSS,
+  exportToSCSS,
+  exportToXAML,
+} from 'store/palette/converters'
 import { paletteStore, setPalette } from 'store/palette'
 import { TextArea } from './inputs'
 import { CopyButton } from './CopyButton'
@@ -39,6 +43,15 @@ export const SCSSExportButton: FC = () => {
   return (
     <CopyButton getContent={() => exportToSCSS(palette)}>
       Copy SCSS variables
+    </CopyButton>
+  )
+}
+
+export const XAMLExportButton: FC = () => {
+  const palette = useStore(paletteStore)
+  return (
+    <CopyButton getContent={() => exportToXAML(palette)}>
+      Copy XAML definition
     </CopyButton>
   )
 }

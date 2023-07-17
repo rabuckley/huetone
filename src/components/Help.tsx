@@ -1,12 +1,16 @@
-import { FC } from 'react'
+import { FC, ReactNode } from 'react'
 import styled from 'styled-components'
-import { CSSExportButton, SCSSExportButton, TokenExportButton } from './Export'
+import {
+  CSSExportButton,
+  SCSSExportButton,
+  TokenExportButton,
+  XAMLExportButton,
+} from './Export'
 
 export const Help: FC = () => (
   <Wrapper>
     <Export />
     <Hotkeys />
-    <Credits />
   </Wrapper>
 )
 
@@ -30,12 +34,13 @@ const Export: FC = () => (
     <p>
       <SCSSExportButton />
     </p>
+    <p>
+      <XAMLExportButton />
+    </p>
   </Section>
 )
 
 const Hotkeys = () => {
-  const isWin = navigator.platform.toUpperCase().indexOf('WIN') >= 0
-  const MetaKey = () => (isWin ? <Key>Ctrl</Key> : <Key>⌘</Key>)
   return (
     <Section>
       <h3>Hotkeys</h3>
@@ -48,11 +53,11 @@ const Hotkeys = () => {
           color
         </li>
         <li>
-          <MetaKey /> + <Key>↑</Key> <Key>↓</Key> <Key>→</Key> <Key>←</Key> —
+          <Key meta /> + <Key>↑</Key> <Key>↓</Key> <Key>→</Key> <Key>←</Key> —
           move rows and columns
         </li>
         <li>
-          <MetaKey /> + <Key>⇧</Key> + <Key>↑</Key> <Key>↓</Key> <Key>→</Key>{' '}
+          <Key meta /> + <Key>⇧</Key> + <Key>↑</Key> <Key>↓</Key> <Key>→</Key>{' '}
           <Key>←</Key> — duplicate rows and columns
         </li>
         <li>
@@ -68,15 +73,15 @@ const Hotkeys = () => {
           color
         </li>
         <li>
-          <MetaKey /> + <Key>C</Key> — copy selected color as hex.
+          <Key meta /> + <Key>C</Key> — copy selected color as hex.
         </li>
         <li>
-          <MetaKey /> + <Key>⇧</Key> + <Key>C</Key> — copy selected color in{' '}
+          <Key meta /> + <Key>⇧</Key> + <Key>C</Key> — copy selected color in{' '}
           <Code>lch()</Code> format. Note that it has limited{' '}
           <Link href="https://caniuse.com/css-lch-lab">browser support</Link>.
         </li>
         <li>
-          <MetaKey /> + <Key>V</Key> — paste color. Just copy color in any
+          <Key meta /> + <Key>V</Key> — paste color. Just copy color in any
           format and paste it here.
         </li>
         <li>
@@ -86,43 +91,6 @@ const Hotkeys = () => {
     </Section>
   )
 }
-
-const Credits = () => (
-  <Section>
-    <h3>Credits</h3>
-    <p>
-      Made by <Link href="https://ardov.me">Alexey Ardov</Link>. Contact me if
-      you have any suggestions.
-    </p>
-    <p>
-      Huetone is heavily inspired by{' '}
-      <Link href="https://stripe.com/blog/accessible-color-systems">
-        that Stripe article
-      </Link>
-      . And it uses the great{' '}
-      <Link href="https://github.com/gka/chroma.js">chroma.js</Link> library
-      under the hood.
-    </p>
-    <p>
-      Special thanks for{' '}
-      <Link href="https://twitter.com/LeaVerou">Lea Verou</Link>,{' '}
-      <Link href="https://twitter.com/svgeesus">Chris Lilley</Link> and the CSS
-      working group for providing all the essential code for color conversions.
-    </p>
-    <p>
-      Accessible Perceptual Contrast Algorithm (APCA) by Andrew Somers is a
-      WCAG 3 working draft and may change later. To learn more visit{' '}
-      <Link href="https://www.w3.org/WAI/GL/task-forces/silver/wiki/Visual_Contrast_of_Text_Subgroup">
-        this page
-      </Link>{' '}
-      or check{' '}
-      <Link href="https://github.com/w3c/wcag/issues/695">
-        this thread on GitHub
-      </Link>
-      .
-    </p>
-  </Section>
-)
 
 const Wrapper = styled.div`
   margin-top: 24px;
@@ -147,15 +115,29 @@ const List = styled.ul`
     margin-top: 0;
   }
 `
-const Key = styled.span`
-  display: inline-block;
-  padding: 0px 0px;
-  text-align: center;
-  min-width: 28px;
-  border-radius: 4px;
-  background-color: var(--c-btn-bg);
-  border: 1px solid var(--c-divider);
-`
+
+interface KeyProps {
+  children?: ReactNode
+  meta?: boolean
+}
+
+export const Key = ({ children, meta }: KeyProps) => {
+  if (meta === true) {
+    const isWin = navigator.platform.toUpperCase().indexOf('WIN') >= 0
+
+    if (isWin) {
+      return <Key>Ctrl</Key>
+    } else {
+      return <Key>⌘</Key>
+    }
+  }
+
+  return (
+    <span className="inline-flex place-content-center p-0.5 text-sm min-w-[3ch] text-center rounded bg-zinc-200 dark:bg-zinc-800">
+      {children}
+    </span>
+  )
+}
 
 const Link = styled.a`
   color: inherit;

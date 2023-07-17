@@ -20,8 +20,9 @@ import { useStore } from '@nanostores/react'
 import { colorSpaceStore, paletteStore, setPalette } from 'store/palette'
 import { selectedStore, setSelected } from 'store/currentPosition'
 import { overlayStore, versusColorStore } from 'store/overlay'
+import Swatch from './Swatch'
 
-const contrast = {
+export const contrast = {
   WCAG: wcagContrast,
   APCA: apcaContrast,
   DELTA_E: deltaEContrast,
@@ -79,16 +80,8 @@ export const PaletteSwatches: FC = () => {
               <Swatch
                 key={toneId + '-' + hueId}
                 onClick={() => setSelected([hueId, toneId])}
-                style={{
-                  background: !bPress
-                    ? color.hex
-                    : colorSpace.lch2color([color.l, 0, 0]).hex,
-                  color: getMostContrast(color.hex, ['#000', '#fff']),
-                  borderRadius: isSelected ? 'var(--radius-m)' : 0,
-                  transform: isSelected ? 'scale(1.25)' : 'scale(1)',
-                  zIndex: isSelected ? 3 : 0,
-                  fontWeight: isSelected ? 900 : 400,
-                }}
+                isSelected={isSelected}
+                color={color}
               >
                 <span>{getCR(color.hex)}</span>
               </Swatch>
@@ -128,20 +121,6 @@ const Wrapper = styled.div<{ columns: number; rows: number }>`
 
 const ToneInput = styled(InvisibleInput)`
   text-align: center;
-`
-
-const Swatch = styled.button`
-  cursor: pointer;
-  display: flex;
-  position: relative;
-  border: none;
-  align-items: center;
-  justify-content: center;
-  will-change: transform;
-
-  :focus {
-    outline: none;
-  }
 `
 
 const SmallButton = styled(Button)`

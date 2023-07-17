@@ -16,6 +16,13 @@ export type DrawChartProps = {
   showRec2020?: boolean
 }
 
+const edge = {
+  r: 10,
+  g: 10,
+  b: 10,
+  a: 255,
+}
+
 const getSrgbPixel = (): TPixelData => [255, 255, 255, 255]
 const getP3pixel = (x: number, y: number): TPixelData => [198, 198, 198, 255]
 const getRec2020pixel = (x: number, y: number): TPixelData => [
@@ -63,18 +70,44 @@ function drawLuminosityChart(props: DrawChartProps) {
         : showP3
         ? within_P3
         : within_sRGB
-      // Luminosity chart only have colors in the middle. So if the current color is undisplayable and we already had displayable colors, there will be no more displayable colors.
-      if (!displayable && hadColors) break
+
+      // Luminosity chart only have colors in the middle.
+      // So if the current color is undisplayable and we already had displayable colors,
+      // there will be no more displayable colors.
+      // if (!displayable && hadColors) break
 
       const dx = x - widthFrom
       if (within_sRGB) {
         hadColors = true
         pixels.setPixel(dx, y, showColors ? [r, g, b, 255] : getSrgbPixel())
       } else if (showP3 && within_P3) {
-        pixels.setPixel(dx, y, getP3pixel(dx, y))
+        pixels.setPixel(dx, y, showColors ? [r, g, b, 255] : getP3pixel(dx, y))
       } else if (showRec2020 && within_Rec2020) {
         // const v = ((Math.sin((x + y * -0.8) * 1.5) + 1) / 2) * 55 + 200
-        pixels.setPixel(dx, y, getRec2020pixel(dx, y))
+        pixels.setPixel(
+          dx,
+          y,
+          showColors ? [r, g, b, 255] : getRec2020pixel(dx, y)
+        )
+      }
+
+      if (!showColors) continue
+
+      const next = lch2color([l - 1, c, h])
+
+      if (within_sRGB && !next.within_sRGB) {
+        drawEdge(x - widthFrom, y, pixels)
+        continue
+      }
+
+      if (showRec2020 && within_P3 && !next.within_P3) {
+        drawEdge(x - widthFrom, y, pixels)
+        continue
+      }
+
+      if (showRec2020 && within_Rec2020 && !next.within_Rec2020) {
+        drawEdge(x - widthFrom, y, pixels)
+        continue
       }
     }
   }
@@ -133,9 +166,32 @@ function drawChromaChart(props: DrawChartProps) {
       if (within_sRGB) {
         pixels.setPixel(dx, y, showColors ? [r, g, b, 255] : getSrgbPixel())
       } else if (showP3 && within_P3) {
-        pixels.setPixel(dx, y, getP3pixel(dx, y))
+        pixels.setPixel(dx, y, showColors ? [r, g, b, 255] : getP3pixel(dx, y))
       } else if (showRec2020 && within_Rec2020) {
-        pixels.setPixel(dx, y, getRec2020pixel(dx, y))
+        pixels.setPixel(
+          dx,
+          y,
+          showColors ? [r, g, b, 255] : getRec2020pixel(dx, y)
+        )
+      }
+
+      if (!showColors) continue
+
+      const next = lch2color([l - 1, c, h])
+
+      if (within_sRGB && !next.within_sRGB) {
+        drawEdge(x - widthFrom, y, pixels)
+        continue
+      }
+
+      if (showRec2020 && within_P3 && !next.within_P3) {
+        drawEdge(x - widthFrom, y, pixels)
+        continue
+      }
+
+      if (showRec2020 && within_Rec2020 && !next.within_Rec2020) {
+        drawEdge(x - widthFrom, y, pixels)
+        continue
       }
     }
   }
@@ -182,9 +238,32 @@ function drawHueChart(props: DrawChartProps) {
       if (within_sRGB) {
         pixels.setPixel(dx, y, showColors ? [r, g, b, 255] : getSrgbPixel())
       } else if (showP3 && within_P3) {
-        pixels.setPixel(dx, y, getP3pixel(dx, y))
+        pixels.setPixel(dx, y, showColors ? [r, g, b, 255] : getP3pixel(dx, y))
       } else if (showRec2020 && within_Rec2020) {
-        pixels.setPixel(dx, y, getRec2020pixel(dx, y))
+        pixels.setPixel(
+          dx,
+          y,
+          showColors ? [r, g, b, 255] : getRec2020pixel(dx, y)
+        )
+      }
+
+      if (!showColors) continue
+
+      const next = lch2color([l - 1, c, h])
+
+      if (within_sRGB && !next.within_sRGB) {
+        drawEdge(x - widthFrom, y, pixels)
+        continue
+      }
+
+      if (showRec2020 && within_P3 && !next.within_P3) {
+        drawEdge(x - widthFrom, y, pixels)
+        continue
+      }
+
+      if (showRec2020 && within_Rec2020 && !next.within_Rec2020) {
+        drawEdge(x - widthFrom, y, pixels)
+        continue
       }
     }
   }
@@ -208,3 +287,7 @@ async function bakeBitmap(pixels: Pixels) {
 export const obj = { drawChromaChart, drawLuminosityChart, drawHueChart }
 export type WorkerObj = typeof obj
 export default Comlink.expose(obj)
+
+function drawEdge(x: number, y: number, pixels: Pixels) {
+  pixels.setPixel(x, y, [edge.r, edge.g, edge.b, edge.a])
+}

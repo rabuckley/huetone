@@ -8,12 +8,13 @@ import { ExportField } from './Export'
 import { ColorInfo } from './ColorInfo'
 import { Help } from './Help'
 import { KeyPressHandler } from './KeyPressHandler'
-import { useKeyPress } from 'shared/hooks/useKeyPress'
 import { paletteStore } from 'store/palette'
 import { selectedStore, setSelected } from 'store/currentPosition'
 import { Header } from './Header'
+import ColourBar from './ColourBar'
+import ToneBar from './ToneBar'
 
-const chartWidth = 400
+const chartWidth = 500
 
 export default function App() {
   const palette = useStore(paletteStore)
@@ -25,7 +26,7 @@ export default function App() {
   )
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <div className="h-full flex flex-col dark:text-zinc-200 dark:bg-zinc-900">
       <Header />
       <Wrapper>
         <KeyPressHandler />
@@ -37,82 +38,110 @@ export default function App() {
           </ControlRow>
         </PaletteSection>
 
-        <ChartsSection>
-          <Charts>
-            <Scale
-              width={chartWidth}
-              selected={selected.toneId}
-              channel="l"
-              colors={palette.colors[selected.hueId]}
-              onSelect={i => setSelected([selected.hueId, i])}
-              onColorChange={(i, lch) => {
-                setSelected([selected.hueId, i])
-                setLchColor(lch, selected.hueId, i)
+        <div className="d-flex gap-4 p-8">
+          <div className="grid grid-cols-2 gap-12">
+            <ColourBar />
+            <ToneBar />
+          </div>
+          <div>
+            <div
+              className="grid gap-4 my-8"
+              style={{
+                gridTemplateColumns: `${chartWidth}px 1rem ${chartWidth}px`,
               }}
-            />
-            <ScaleIndicator axis="l" />
-            <Scale
-              width={chartWidth}
-              selected={selected.hueId}
-              channel="l"
-              colors={hueColors}
-              onSelect={i => setSelected([i, selected.toneId])}
-              onColorChange={(i, lch) => {
-                setSelected([i, selected.toneId])
-                setLchColor(lch, i, selected.toneId)
+            >
+              <Scale
+                width={chartWidth}
+                selected={selected.toneId}
+                channel="l"
+                colors={palette.colors[selected.hueId]}
+                onSelect={i => setSelected([selected.hueId, i])}
+                onColorChange={(i, lch) => {
+                  setSelected([selected.hueId, i])
+                  setLchColor(lch, selected.hueId, i)
+                }}
+              />
+              <ScaleIndicator axis="l" />
+              <Scale
+                width={chartWidth}
+                selected={selected.hueId}
+                channel="l"
+                colors={hueColors}
+                onSelect={i => setSelected([i, selected.toneId])}
+                onColorChange={(i, lch) => {
+                  setSelected([i, selected.toneId])
+                  setLchColor(lch, i, selected.toneId)
+                }}
+              />
+            </div>
+          </div>
+          <div>
+            <div
+              className="grid gap-4 my-8"
+              style={{
+                gridTemplateColumns: `${chartWidth}px 1rem ${chartWidth}px`,
               }}
-            />
+            >
+              <Scale
+                width={chartWidth}
+                selected={selected.toneId}
+                channel="c"
+                colors={palette.colors[selected.hueId]}
+                onSelect={i => setSelected([selected.hueId, i])}
+                onColorChange={(i, lch) => {
+                  setSelected([selected.hueId, i])
+                  setLchColor(lch, selected.hueId, i)
+                }}
+              />
+              <ScaleIndicator axis="c" />
+              <Scale
+                width={chartWidth}
+                selected={selected.hueId}
+                channel="c"
+                colors={hueColors}
+                onSelect={i => setSelected([i, selected.toneId])}
+                onColorChange={(i, lch) => {
+                  setSelected([i, selected.toneId])
+                  setLchColor(lch, i, selected.toneId)
+                }}
+              />
+            </div>
+          </div>
 
-            <Scale
-              width={chartWidth}
-              selected={selected.toneId}
-              channel="c"
-              colors={palette.colors[selected.hueId]}
-              onSelect={i => setSelected([selected.hueId, i])}
-              onColorChange={(i, lch) => {
-                setSelected([selected.hueId, i])
-                setLchColor(lch, selected.hueId, i)
+          <div>
+            <div
+              className="grid gap-4"
+              style={{
+                gridTemplateColumns: `${chartWidth}px 1rem ${chartWidth}px`,
               }}
-            />
-            <ScaleIndicator axis="c" />
-            <Scale
-              width={chartWidth}
-              selected={selected.hueId}
-              channel="c"
-              colors={hueColors}
-              onSelect={i => setSelected([i, selected.toneId])}
-              onColorChange={(i, lch) => {
-                setSelected([i, selected.toneId])
-                setLchColor(lch, i, selected.toneId)
-              }}
-            />
-
-            <Scale
-              width={chartWidth}
-              selected={selected.toneId}
-              channel="h"
-              colors={palette.colors[selected.hueId]}
-              onSelect={i => setSelected([selected.hueId, i])}
-              onColorChange={(i, lch) => {
-                setSelected([selected.hueId, i])
-                setLchColor(lch, selected.hueId, i)
-              }}
-            />
-            <ScaleIndicator axis="h" />
-            <Scale
-              width={chartWidth}
-              selected={selected.hueId}
-              channel="h"
-              colors={hueColors}
-              onSelect={i => setSelected([i, selected.toneId])}
-              onColorChange={(i, lch) => {
-                setSelected([i, selected.toneId])
-                setLchColor(lch, i, selected.toneId)
-              }}
-            />
-          </Charts>
+            >
+              <Scale
+                width={chartWidth}
+                selected={selected.toneId}
+                channel="h"
+                colors={palette.colors[selected.hueId]}
+                onSelect={i => setSelected([selected.hueId, i])}
+                onColorChange={(i, lch) => {
+                  setSelected([selected.hueId, i])
+                  setLchColor(lch, selected.hueId, i)
+                }}
+              />
+              <ScaleIndicator axis="h" />
+              <Scale
+                width={chartWidth}
+                selected={selected.hueId}
+                channel="h"
+                colors={hueColors}
+                onSelect={i => setSelected([i, selected.toneId])}
+                onColorChange={(i, lch) => {
+                  setSelected([i, selected.toneId])
+                  setLchColor(lch, i, selected.toneId)
+                }}
+              />
+            </div>
+          </div>
           <Help />
-        </ChartsSection>
+        </div>
       </Wrapper>
     </div>
   )
@@ -126,6 +155,7 @@ const Wrapper = styled.main`
     flex-direction: column;
   }
 `
+
 const ControlRow = styled.main`
   display: flex;
   flex-wrap: wrap;
@@ -139,22 +169,6 @@ const PaletteSection = styled.section`
   flex-direction: column;
   gap: 16px;
   padding: 16px;
-`
-const Charts = styled.section`
-  display: grid;
-  gap: 16px;
-  grid-template-columns: ${chartWidth}px 8px ${chartWidth}px;
-`
-const ChartsSection = styled.section`
-  --c-bg: var(--c-bg-card);
-  overflow: auto;
-  display: flex;
-  gap: 16px;
-  flex-direction: column;
-  padding: 16px 24px;
-  flex-grow: 1;
-  background: var(--c-bg);
-  overflow: auto;
 `
 
 const Axis = styled.div`
@@ -196,38 +210,5 @@ const axises = {
 }
 
 const ScaleIndicator: FC<{ axis: 'l' | 'c' | 'h' }> = ({ axis }) => {
-  const pressed = useKeyPress('Key' + axis.toUpperCase())
-  const style = pressed
-    ? { fontWeight: 900, '--bg': 'var(--c-btn-bg-active)' }
-    : { '--bg': 'var(--c-btn-bg)' }
-  return (
-    <ScaleIndicatorWrapper>
-      <LetterContainer>
-        <Letter style={style}>{axis.toUpperCase()}</Letter>
-      </LetterContainer>
-      {axises[axis]}
-    </ScaleIndicatorWrapper>
-  )
+  return <div className="grid pt-20">{axises[axis]}</div>
 }
-
-const LetterContainer = styled.span`
-  position: relative;
-`
-
-const Letter = styled.span`
-  width: 24px;
-  text-align: center;
-  line-height: 24px;
-  color: var(--c-text-primary);
-  background: var(--bg);
-  border-radius: var(--radius-m);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`
-
-const ScaleIndicatorWrapper = styled.div`
-  display: grid;
-  grid-template-rows: 26px auto;
-`

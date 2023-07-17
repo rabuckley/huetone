@@ -35,7 +35,7 @@ export function Header() {
   const selected = useStore(selectedStore)
 
   return (
-    <Wrapper>
+    <div className="flex justify-between p-4 bg-white dark:bg-black dark:text-white">
       <ControlRow>
         <PaletteSelect />
         <CopyButton getContent={() => getPaletteLink(palette)}>
@@ -84,21 +84,11 @@ export function Header() {
         <ChartSettings />
 
         <ThemeButton />
-        <Button as="a" href="https://github.com/ardov/huetone">
-          <GitHub />
-        </Button>
       </ControlRow>
-    </Wrapper>
+    </div>
   )
 }
 
-const Wrapper = styled.header`
-  width: 100%;
-  display: flex;
-  padding: 16px;
-  border-bottom: 1px solid var(--c-divider);
-  justify-content: space-between;
-`
 const ControlRow = styled.main`
   display: flex;
   flex-wrap: wrap;

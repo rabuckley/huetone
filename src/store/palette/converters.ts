@@ -139,15 +139,40 @@ export function exportToCSS(palette: Palette): string {
  */
 export function exportToSCSS(palette: Palette): string {
   let { tones, hues, colors, name } = palette
-  let strings: string[] = [`/* ${name} color palette */`]
+  let strings: string[] = []
   hues.forEach((hue, hueIdx) => {
-    strings.push('')
-    strings.push('/* ' + hue + ' */')
     tones.forEach((tone, toneIdx) => {
       const color = colors[hueIdx][toneIdx]
       strings.push(`$${hue.toLowerCase()}-${tone}: ${color.hex};`)
     })
   })
+  return strings.join('\n')
+}
+
+/** Convert local palette to XAML definitions
+ * @param palette
+ */
+export function exportToXAML(palette: Palette): string {
+  let { tones, hues, colors, name } = palette
+  let strings: string[] = []
+  hues.forEach((hue, hueIdx) => {
+    tones.forEach((tone, toneIdx) => {
+      const color = colors[hueIdx][toneIdx]
+      strings.push(`<Color x:Key="${hue}${tone}">${color.hex}</Color>`)
+    })
+  })
+
+  strings.push('')
+
+  hues.forEach((hue, hueIdx) => {
+    tones.forEach((tone, toneIdx) => {
+      const color = colors[hueIdx][toneIdx]
+      strings.push(
+        `<SolidColorBrush x:Key="${hue}${tone}Brush" Color="{StaticResource ${hue}${tone}}"/>`
+      )
+    })
+  })
+
   return strings.join('\n')
 }
 

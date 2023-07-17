@@ -6,6 +6,12 @@ import { colorSpaceStore } from 'store/palette'
 import { chartSettingsStore } from 'store/chartSettings'
 import { Canvas } from './Chart/Canvas'
 
+const Names = {
+  l: 'Lightness',
+  c: 'Chroma',
+  h: 'Hue',
+}
+
 type ScaleProps = {
   colors: TColor[]
   selected: number
@@ -30,70 +36,73 @@ export function Scale({
   if (!colors?.length) return null
   const sectionWidth = width / colors.length
   return (
-    <div
-      style={{
-        width: width,
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
+    <div>
+      <h2 className="font-semibold text-lg mt-8 mb-4">{Names[channel]}</h2>
       <div
         style={{
+          width: width,
           display: 'flex',
-          borderRadius: '8px 8px 0 0',
-          overflow: 'hidden',
+          flexDirection: 'column',
         }}
       >
-        {colors.map((color, i) => (
-          <Value key={i} color={color.hex} onClick={() => onSelect(i)}>
-            {+color[channel].toFixed(1)}
-          </Value>
-        ))}
-      </div>
-      <div
-        style={{
-          display: 'flex',
-          position: 'relative',
-          padding: 0,
-          margin: 0,
-          lineHeight: 0,
-        }}
-      >
-        <Canvas
-          width={width}
-          height={height}
-          channel={channel}
-          colors={colors}
-        />
+        <div
+          style={{
+            display: 'flex',
+            borderRadius: '8px 8px 0 0',
+            overflow: 'hidden',
+          }}
+        >
+          {colors.map((color, i) => (
+            <Value key={i} color={color.hex} onClick={() => onSelect(i)}>
+              {+color[channel].toFixed(1)}
+            </Value>
+          ))}
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            position: 'relative',
+            padding: 0,
+            margin: 0,
+            lineHeight: 0,
+          }}
+        >
+          <Canvas
+            width={width}
+            height={height}
+            channel={channel}
+            colors={colors}
+          />
 
-        {colors.map((color, i) => {
-          const contrast = getMostContrast(color.hex, ['#fff', '#000'])
-          return (
-            <Knob
-              key={i}
-              min={ranges[channel].min}
-              max={ranges[channel].max}
-              step={ranges[channel].step}
-              value={color[channel]}
-              onChange={e => {
-                const { l, c, h } = color
-                const value = +e.target.value
-                if (channel === 'l') onColorChange(i, [value, c, h])
-                if (channel === 'c') onColorChange(i, [l, value, h])
-                if (channel === 'h') onColorChange(i, [l, c, value])
-              }}
-              onClick={() => onSelect(i)}
-              isSelected={i === selected}
-              style={{
-                // @ts-ignore
-                '--contrast': contrast,
-                '--bg': showColors ? contrast : color.hex,
-              }}
-              canvasHeight={height}
-              left={sectionWidth * i + sectionWidth / 2}
-            />
-          )
-        })}
+          {colors.map((color, i) => {
+            const contrast = getMostContrast(color.hex, ['#fff', '#000'])
+            return (
+              <Knob
+                key={i}
+                min={ranges[channel].min}
+                max={ranges[channel].max}
+                step={ranges[channel].step}
+                value={color[channel]}
+                onChange={e => {
+                  const { l, c, h } = color
+                  const value = +e.target.value
+                  if (channel === 'l') onColorChange(i, [value, c, h])
+                  if (channel === 'c') onColorChange(i, [l, value, h])
+                  if (channel === 'h') onColorChange(i, [l, c, value])
+                }}
+                onClick={() => onSelect(i)}
+                isSelected={i === selected}
+                style={{
+                  // @ts-ignore
+                  '--contrast': contrast,
+                  '--bg': showColors ? contrast : color.hex,
+                }}
+                canvasHeight={height}
+                left={sectionWidth * i + sectionWidth / 2}
+              />
+            )
+          })}
+        </div>
       </div>
     </div>
   )

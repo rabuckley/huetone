@@ -71,7 +71,8 @@ const PaletteSelectComponent = () => {
   return (
     <Menu.Root>
       <Menu.Trigger asChild>
-        <Button
+        <button
+          className="flex px-4 py-2 text-red bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded"
           title={paletteList[currentIdx].name}
           style={{ width: 200, justifyContent: 'space-between' }}
         >
@@ -86,7 +87,7 @@ const PaletteSelectComponent = () => {
             {paletteList[currentIdx].name}
           </span>
           <ChevronDown />
-        </Button>
+        </button>
       </Menu.Trigger>
 
       <Menu.Portal>

@@ -2,6 +2,7 @@ import React, { FC, SVGProps } from 'react'
 
 export const Link: FC<SVGProps<SVGSVGElement>> = props => (
   <svg
+    className='mr-2 mt-0.5'
     width="20"
     height="20"
     viewBox="0 0 24 24"

@@ -2,6 +2,7 @@ import React, { FC, SVGProps } from 'react'
 
 export const MoonIcon: FC<SVGProps<SVGSVGElement>> = props => (
   <svg
+    className='mt-0.5'
     width="20"
     height="20"
     viewBox="0 0 24 24"

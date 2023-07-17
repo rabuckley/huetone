@@ -8,7 +8,7 @@ import React, {
 } from 'react'
 
 type ColorScheme = 'light' | 'dark'
-const KEY = 'colorScheme'
+const KEY = 'theme'
 
 const SchemeContext = createContext<[ColorScheme, () => void]>([
   getCurrent(),
@@ -23,11 +23,22 @@ export const ColorSchemeProvider: FC<{ children: React.ReactNode }> = ({
   const toggle = useCallback(() => {
     const current = getCurrent()
     const systemPreference = getSystemPreference()
+
     if (current === systemPreference) {
       localStorage.setItem(KEY, current === 'light' ? 'dark' : 'light')
     } else {
+      localStorage.removeItem('theme')
       localStorage.removeItem(KEY)
     }
+
+    if (current === 'light') {
+      window.document.documentElement.classList.remove('light')
+      window.document.documentElement.classList.add('dark')
+    } else {
+      window.document.documentElement.classList.remove('dark')
+      window.document.documentElement.classList.add('light')
+    }
+
     setScheme(getCurrent())
   }, [])
 
@@ -36,6 +47,7 @@ export const ColorSchemeProvider: FC<{ children: React.ReactNode }> = ({
     const updateValue = (e: StorageEvent) => {
       if (e.key === KEY) setScheme(getCurrent())
     }
+
     window.addEventListener('storage', updateValue)
     return () => window.removeEventListener('storage', updateValue)
   })
@@ -43,6 +55,7 @@ export const ColorSchemeProvider: FC<{ children: React.ReactNode }> = ({
   // Add handler to update on prefers-color-scheme change
   useEffect(() => {
     const updateValue = () => setScheme(getCurrent())
+
     window
       .matchMedia('(prefers-color-scheme: dark)')
       .addEventListener('change', updateValue)
@@ -61,7 +74,9 @@ export const ColorSchemeProvider: FC<{ children: React.ReactNode }> = ({
 export const useColorScheme = () => useContext(SchemeContext)
 
 function getCurrent(key = KEY): ColorScheme {
-  return getLocalPreference() || getSystemPreference()
+  const current = getLocalPreference() || getSystemPreference()
+  window.document.documentElement.classList.add(current)
+  return current
 }
 
 function getSystemPreference(): ColorScheme {

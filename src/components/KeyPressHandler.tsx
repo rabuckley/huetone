@@ -1,5 +1,6 @@
 import { FC, useEffect } from 'react'
 import {
+  currentLuminanceToColumn,
   duplicateHue,
   duplicateTone,
   reorderHues,
@@ -36,6 +37,11 @@ export const KeyPressHandler: FC = () => {
       const noDefault = (func: () => any) => {
         e.preventDefault()
         func()
+      }
+
+      if (metaPressed && code === 'KeyA') {
+        e.preventDefault()
+        currentLuminanceToColumn()
       }
 
       if (shiftKey && metaPressed && code === 'KeyC') return copyCurrentLCH()

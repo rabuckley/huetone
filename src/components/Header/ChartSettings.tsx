@@ -17,9 +17,12 @@ export const ChartSettings = () => {
   return (
     <Menu.Root>
       <Menu.Trigger asChild>
-        <Button title="Chart settings">
+        <button
+          className="flex px-4 py-2 text-red bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded"
+          title="Chart settings"
+        >
           <Settings />
-        </Button>
+        </button>
       </Menu.Trigger>
 
       <Menu.Portal>
