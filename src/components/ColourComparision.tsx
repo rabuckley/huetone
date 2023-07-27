@@ -1,5 +1,6 @@
 import { TColor } from 'shared/types'
 import { colorSpaces } from 'shared/colorFuncs'
+import { getMostContrast } from 'shared/color'
 
 const DISPLAY_PRECISION = 3
 
@@ -27,6 +28,8 @@ const ColourComparsion = ({ colour }: ColourComparisionProps) => {
     colour.h,
   ])
 
+  const contrast = getMostContrast(colour.hex, ['#000', '#fff'])
+
   if (within_sRGB) {
     return (
       <div className="grid grid-cols-1 p-4 lg:p-12 bg-gray-100 dark:bg-zinc-800 rounded-2xl mb-6">
@@ -34,8 +37,15 @@ const ColourComparsion = ({ colour }: ColourComparisionProps) => {
           className="w-full h-20 grid place-content-center rounded-lg"
           style={{ backgroundColor: colour.hex }}
         >
-          <div className="text-white font-semibold text-center">sRGB</div>
-          <div className="text-white font-mono">{colour.hex}</div>
+          <div
+            style={{ color: contrast }}
+            className="font-semibold text-center"
+          >
+            sRGB
+          </div>
+          <div style={{ color: contrast }} className="font-mono">
+            {colour.hex}
+          </div>
         </div>
       </div>
     )
@@ -53,15 +63,29 @@ const ColourComparsion = ({ colour }: ColourComparisionProps) => {
             className="w-full h-20 grid place-content-center rounded-lg"
             style={{ backgroundColor: colour.hex }}
           >
-            <div className="text-white font-semibold text-center">Fallback</div>
-            <div className="text-white font-mono">{colour.hex}</div>
+            <div
+              style={{ color: contrast }}
+              className="text-white font-semibold text-center"
+            >
+              Fallback
+            </div>
+            <div style={{ color: contrast }} className="text-white font-mono">
+              {colour.hex}
+            </div>
           </div>
           <div
             className="w-full h-20 grid place-content-center rounded-lg"
             style={{ backgroundColor: colourOKLCH }}
           >
-            <div className="text-white font-semibold text-center">P3</div>
-            <div className="text-white font-mono">{colourOKLCH}</div>
+            <div
+              style={{ color: contrast }}
+              className="text-white font-semibold text-center"
+            >
+              P3
+            </div>
+            <div style={{ color: contrast }} className="text-white font-mono">
+              {colourOKLCH}
+            </div>
           </div>
         </div>
       )
@@ -72,12 +96,26 @@ const ColourComparsion = ({ colour }: ColourComparisionProps) => {
             className="w-full h-20 grid place-content-center rounded-lg"
             style={{ backgroundColor: colour.hex }}
           >
-            <div className="text-white font-semibold text-center">Fallback</div>
-            <div className="text-white font-mono">{colour.hex}</div>
+            <div
+              style={{ color: contrast }}
+              className="font-semibold text-center"
+            >
+              Fallback
+            </div>
+            <div style={{ color: contrast }} className="font-mono">
+              {colour.hex}
+            </div>
           </div>
           <div className="w-full h-20 grid place-content-center rounded-lg">
-            <div className="text-white font-semibold text-center">P3</div>
-            <div className="text-white font-mono">Not supported</div>
+            <div
+              style={{ color: contrast }}
+              className="font-semibold text-center"
+            >
+              P3
+            </div>
+            <div style={{ color: contrast }} className="font-mono">
+              Not supported
+            </div>
           </div>
         </div>
       )
@@ -92,15 +130,29 @@ const ColourComparsion = ({ colour }: ColourComparisionProps) => {
             className="w-full h-20 grid place-content-center rounded-lg"
             style={{ backgroundColor: colour.hex }}
           >
-            <div className="text-white font-semibold text-center">Fallback</div>
-            <div className="text-white font-mono">{colour.hex}</div>
+            <div
+              style={{ color: contrast }}
+              className="font-semibold text-center"
+            >
+              Fallback
+            </div>
+            <div style={{ color: contrast }} className="font-mono">
+              {colour.hex}
+            </div>
           </div>
           <div
             className="w-full h-20 grid place-content-center rounded-lg"
             style={{ backgroundColor: colour.hex }}
           >
-            <div className="text-white font-semibold text-center">rec2020</div>
-            <div className="text-white font-mono">{colour.hex}</div>
+            <div
+              style={{ color: contrast }}
+              className="font-semibold text-center"
+            >
+              rec2020
+            </div>
+            <div style={{ color: contrast }} className="font-mono">
+              {colour.hex}
+            </div>
           </div>
         </div>
       )
@@ -111,8 +163,15 @@ const ColourComparsion = ({ colour }: ColourComparisionProps) => {
             className="w-full h-20 grid place-content-center rounded-lg"
             style={{ backgroundColor: colour.hex }}
           >
-            <div className="text-white font-semibold text-center">Fallback</div>
-            <div className="text-white font-mono">{colour.hex}</div>
+            <div
+              style={{ color: contrast }}
+              className="font-semibold text-center"
+            >
+              Fallback
+            </div>
+            <div style={{ color: contrast }} className="font-mono">
+              {colour.hex}
+            </div>
           </div>
           <div className="w-full h-20 grid place-content-center rounded-lg border-dotted border-zinc-400 border-2 text-center font-mono">
             Rec2020 is not supported on this device
@@ -128,8 +187,12 @@ const ColourComparsion = ({ colour }: ColourComparisionProps) => {
         className="w-full h-20 grid place-content-center rounded-lg"
         style={{ backgroundColor: colour.hex }}
       >
-        <div className="text-white font-semibold text-center">Fallback</div>
-        <div className="text-white font-mono">{colour.hex}</div>
+        <div style={{ color: contrast }} className="font-semibold text-center">
+          Fallback
+        </div>
+        <div style={{ color: contrast }} className="font-mono">
+          {colour.hex}
+        </div>
       </div>
       <div className="w-full h-20 grid place-content-center rounded-lg border-dotted border-zinc-400 border-2 text-center font-mono">
         Unavailable on any device
