@@ -1,6 +1,7 @@
 import { FC, ReactNode } from 'react'
 import styled from 'styled-components'
 import {
+  CSExportButton,
   CSSExportButton,
   SCSSExportButton,
   TokenExportButton,
@@ -36,6 +37,9 @@ const Export: FC = () => (
     </p>
     <p>
       <XAMLExportButton />
+    </p>
+    <p>
+      <CSExportButton />
     </p>
   </Section>
 )

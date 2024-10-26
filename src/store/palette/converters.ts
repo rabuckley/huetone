@@ -176,6 +176,33 @@ export function exportToXAML(palette: Palette): string {
   return strings.join('\n')
 }
 
+/** Convert local palette to CS definitions
+ * @param palette
+ */
+export function exportToCS(palette: Palette): string {
+  let { tones, hues, colors, name } = palette
+  let strings: string[] = []
+  hues.forEach((hue, hueIdx) => {
+    tones.forEach((tone, toneIdx) => {
+      const color = colors[hueIdx][toneIdx]
+      strings.push(`public static Color ${hue}${tone} => Color.FromRgb(${color.r}, ${color.g}, ${color.b});`)
+    })
+  })
+
+  strings.push('')
+
+  hues.forEach((hue, hueIdx) => {
+    tones.forEach((tone, toneIdx) => {
+      const color = colors[hueIdx][toneIdx]
+      strings.push(
+        `public static Brush ${hue}${tone}Brush => new SolidColorBrush(${hue}${tone});`
+      )
+    })
+  })
+
+  return strings.join('\n')
+}
+
 /** Get palette permalink
  *  @param palette
  */

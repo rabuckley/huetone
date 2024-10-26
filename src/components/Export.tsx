@@ -7,6 +7,7 @@ import {
   parseHexPalette,
 } from 'store/palette'
 import {
+  exportToCS,
   exportToCSS,
   exportToSCSS,
   exportToXAML,
@@ -52,6 +53,15 @@ export const XAMLExportButton: FC = () => {
   return (
     <CopyButton getContent={() => exportToXAML(palette)}>
       Copy XAML definition
+    </CopyButton>
+  )
+}
+
+export const CSExportButton: FC = () => {
+  const palette = useStore(paletteStore)
+  return (
+    <CopyButton getContent={() => exportToCS(palette)}>
+      Copy C# definition
     </CopyButton>
   )
 }
