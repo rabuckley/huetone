@@ -1,4 +1,4 @@
-import { atom, computed, action } from 'nanostores'
+import { atom, computed } from 'nanostores'
 import { clamp } from 'shared/utils'
 import { paletteStore } from './palette'
 
@@ -6,13 +6,9 @@ export type TPosition = [number, number]
 
 const currentPositionStore = atom<TPosition | null>(null)
 
-export const setSelected = action(
-  currentPositionStore,
-  'select color',
-  (store, position: TPosition) => {
-    store.set(position)
-  }
-)
+export const setSelected = (position: TPosition) => {
+  currentPositionStore.set(position)
+}
 
 export const selectedStore = computed(
   [currentPositionStore, paletteStore],

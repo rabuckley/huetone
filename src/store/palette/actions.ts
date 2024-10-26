@@ -1,5 +1,4 @@
 import { HexPalette, LCH, Palette, spaceName } from 'shared/types'
-import { action } from 'nanostores'
 import { convertToMode } from './paletteReducers'
 import { paletteStore, paletteIdStore, paletteListStore } from './stores'
 import {
@@ -22,35 +21,23 @@ export const switchPalette = (id: number) => {
   paletteStore.set(newPalette)
 }
 
-export const switchColorSpace = action(
-  paletteStore,
-  'switchColorSpace',
-  (store, space: spaceName) => {
-    const palette = store.get()
-    if (palette.mode === space) return
-    store.set(convertToMode(palette, space))
-  }
-)
+export const switchColorSpace = (space: spaceName) => {
+  const palette = paletteStore.get()
+  if (palette.mode === space) return
+  paletteStore.set(convertToMode(palette, space))
+}
 
 // Palllete list actions
 
-export const updateSavedPalette = action(
-  savedPalettesStore,
-  'updateSavedPalette',
-  (store, palette: HexPalette, idx: number) => {
-    const paletteList = store.get()
-    store.set(paletteList.map((p, i) => (i === idx ? palette : p)))
-  }
-)
+export const updateSavedPalette = (palette: HexPalette, idx: number) => {
+  const paletteList = savedPalettesStore.get()
+  savedPalettesStore.set(paletteList.map((p, i) => (i === idx ? palette : p)))
+}
 
-const removeSavedPalette = action(
-  savedPalettesStore,
-  'removeSavedPalette',
-  (store, idx: number) => {
-    const paletteList = store.get()
-    store.set(paletteList.filter((_, i) => i !== idx))
-  }
-)
+const removeSavedPalette = (idx: number) => {
+  const paletteList = savedPalettesStore.get()
+  savedPalettesStore.set(paletteList.filter((_, i) => i !== idx))
+}
 
 export const deletePalette = (idx: number) => {
   removeSavedPalette(idx)
@@ -76,97 +63,75 @@ export const duplicatePalette = (idx: number) => {
 
 // Color space actions
 
-export const toggleColorSpace = action(
-  paletteStore,
-  'toggleColorSpace',
-  store => {
-    const palette = store.get()
-    switchColorSpace(
-      palette.mode === spaceName.cielch ? spaceName.oklch : spaceName.cielch
-    )
-  }
-)
+export const toggleColorSpace = () => {
+  const palette = paletteStore.get()
+  switchColorSpace(
+    palette.mode === spaceName.cielch ? spaceName.oklch : spaceName.cielch
+  )
+}
 
 //  Palette actions
 
 /** Main action for editing the palette.  */
-export const setPalette = action(
-  paletteStore,
-  'setPalette',
-  (store, newPalette: Palette) => {
-    const savedPalettes = savedPalettesStore.get()
-    const currentId = paletteIdStore.get()
-    if (currentId > savedPalettes.length - 1) {
-      // Trying to change preset
-      const name = newPalette.name + ' copy'
-      const changedPalette = { ...newPalette, name }
-      savedPalettesStore.set([
-        exportToHexPalette(changedPalette),
-        ...savedPalettes,
-      ])
-      paletteIdStore.set(0)
-      store.set(changedPalette)
-    } else {
-      // Changing user palette
-      store.set(newPalette)
-      setTimeout(() => {
-        updateSavedPalette(exportToHexPalette(newPalette), currentId)
-      }, 10)
-    }
+export const setPalette = (newPalette: Palette) => {
+  const savedPalettes = savedPalettesStore.get()
+  const currentId = paletteIdStore.get()
+  if (currentId > savedPalettes.length - 1) {
+    // Trying to change preset
+    const name = newPalette.name + ' copy'
+    const changedPalette = { ...newPalette, name }
+    savedPalettesStore.set([
+      exportToHexPalette(changedPalette),
+      ...savedPalettes,
+    ])
+    paletteIdStore.set(0)
+    paletteStore.set(changedPalette)
+  } else {
+    // Changing user palette
+    paletteStore.set(newPalette)
+    setTimeout(() => {
+      updateSavedPalette(exportToHexPalette(newPalette), currentId)
+    }, 10)
   }
-)
+}
 
-export const pushColorsIntoRgb = action(
-  paletteStore,
-  'pushColorsIntoRgb',
-  store => setPalette(clampColorsToRgb(store.get()))
-)
+export const pushColorsIntoRgb = () => {
+  setPalette(clampColorsToRgb(paletteStore.get()))
+}
 
-export const currentLuminanceToColumn = action(
-  paletteStore,
-  'currentLuminanceToColumn',
-  store => {
-    const selected = selectedStore.get()
-    setPalette(setToneLuminance(store.get(), selected.color.l, selected.toneId))
-  }
-)
+export const currentLuminanceToColumn = () => {
+  const selected = selectedStore.get()
+  setPalette(
+    setToneLuminance(paletteStore.get(), selected.color.l, selected.toneId)
+  )
+}
 
-export const currentHueToRow = action(
-  paletteStore,
-  'currentHueToRow',
-  store => {
-    const selected = selectedStore.get()
-    setPalette(setHueHue(store.get(), selected.color.h, selected.hueId))
-  }
-)
+export const currentHueToRow = () => {
+  const selected = selectedStore.get()
+  setPalette(setHueHue(paletteStore.get(), selected.color.h, selected.hueId))
+}
 
-export const currentChromaToRow = action(
-  paletteStore,
-  'currentChromaToRow',
-  store => {
-    const selected = selectedStore.get()
-    setPalette(setChromaChroma(store.get(), selected.color.c, selected.hueId))
-  }
-)
+export const currentChromaToRow = () => {
+  const selected = selectedStore.get()
+  setPalette(
+    setChromaChroma(paletteStore.get(), selected.color.c, selected.hueId)
+  )
+}
 
-export const renamePalette = action(paletteStore, 'rename', (store, name) => {
-  setPalette({ ...store.get(), name })
-})
+export const renamePalette = (name: string) => {
+  setPalette({ ...paletteStore.get(), name })
+}
 
-export const setLchColor = action(
-  paletteStore,
-  'setLchColor',
-  (store, lch: LCH, hueId: number, toneId: number) => {
-    const palette = store.get()
-    const { lch2color } = colorSpaceStore.get()
-    const color = lch2color(lch)
-    setPalette({
-      ...palette,
-      colors: palette.colors.map((tones, hue) =>
-        hue === hueId
-          ? tones.map((lch, tone) => (toneId === tone ? color : lch))
-          : tones
-      ),
-    })
-  }
-)
+export const setLchColor = (lch: LCH, hueId: number, toneId: number) => {
+  const palette = paletteStore.get()
+  const { lch2color } = colorSpaceStore.get()
+  const color = lch2color(lch)
+  setPalette({
+    ...palette,
+    colors: palette.colors.map((tones, hue) =>
+      hue === hueId
+        ? tones.map((lch, tone) => (toneId === tone ? color : lch))
+        : tones
+    ),
+  })
+}

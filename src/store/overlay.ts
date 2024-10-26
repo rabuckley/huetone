@@ -1,4 +1,4 @@
-import { action, computed, map } from 'nanostores'
+import { computed, map } from 'nanostores'
 import { selectedStore } from './currentPosition'
 
 export type TOverlayMode = 'APCA' | 'WCAG' | 'NONE' | 'DELTA_E'
@@ -19,20 +19,10 @@ export const versusColorStore = computed(
   }
 )
 
-// ACTIONS
+export const setOverlayMode = (mode: TOverlayMode) => {
+  overlayStore.setKey('mode', mode)
+}
 
-export const setOverlayMode = action(
-  overlayStore,
-  'setOverlayMode',
-  (store, mode: TOverlayMode) => {
-    store.setKey('mode', mode)
-  }
-)
-
-export const setVersusColor = action(
-  overlayStore,
-  'setVersusColor',
-  (store, color: TVersus) => {
-    store.setKey('versus', color)
-  }
-)
+export const setVersusColor = (color: TVersus) => {
+  overlayStore.setKey('versus', color)
+}

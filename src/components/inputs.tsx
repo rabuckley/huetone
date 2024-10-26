@@ -1,5 +1,5 @@
 import { MouseEventHandler, ReactNode } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 interface ButtonProps {
   children: ReactNode
@@ -36,7 +36,7 @@ export const InvisibleInput = styled.input`
   }
 `
 
-export const Input = styled.input`
+const inputStyles = css`
   border: 1px solid transparent;
   border-radius: var(--radius-m);
   color: var(--c-text-primary);
@@ -53,7 +53,9 @@ export const Input = styled.input`
   }
 `
 
-export const TextArea = Input.withComponent('textarea')
+export const Input = styled.input(inputStyles as any)
+
+export const TextArea = styled.textarea(inputStyles as any);
 
 export const ControlGroup = styled.div`
   display: flex;
